@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Výber nábytku</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    label, select, input { margin: 5px; }
+    canvas { border: 1px solid #000; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Návrh nábytku</h2>
+  <label for="typ">Vyber typ:</label>
+  <select id="typ">
+    <option value="skrina">Skriňa</option>
+    <option value="komoda">Komoda</option>
+  </select><br>
+
+  <label for="sirka">Šírka (cm):</label>
+  <input type="number" id="sirka" value="100"><br>
+
+  <label for="vyska">Výška (cm):</label>
+  <input type="number" id="vyska" value="200"><br>
+
+  <label for="hlbka">Hĺbka (cm):</label>
+  <input type="number" id="hlbka" value="50"><br>
+
+  <button onclick="nakresli()">Nakresli</button>
+
+  <canvas id="platno" width="400" height="400"></canvas>
+
+  <script>
+    function nakresli() {
+      const typ = document.getElementById("typ").value;
+      const sirka = parseInt(document.getElementById("sirka").value);
+      const vyska = parseInt(document.getElementById("vyska").value);
+      const hlbka = parseInt(document.getElementById("hlbka").value);
+
+      const canvas = document.getElementById("platno");
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Mierka (zmenšíme skutočné rozmery na veľkosť plátna)
+      const scale = 1;
+
+      const width = sirka * scale;
+      const height = vyska * scale;
+
+      ctx.fillStyle = "#b0c4de";
+      ctx.strokeStyle = "#000";
+
+      // Nakreslenie podľa typu
+      if (typ === "skrina") {
+        // Skriňa - pohľad spredu (dvere)
+        ctx.fillRect(100, 50, width, height);
+        ctx.strokeRect(100, 50, width, height);
+        // stredová čiara - dvere
+        ctx.beginPath();
+        ctx.moveTo(100 + width / 2, 50);
+        ctx.lineTo(100 + width / 2, 50 + height);
+        ctx.stroke();
+      } else {
+        // Komoda - pohľad spredu (zásuvky)
+        ctx.fillRect(100, 50, width, height);
+        ctx.strokeRect(100, 50, width, height);
+
+        const pocetZasuviek = 4;
+        const zasuvkaVyska = height / pocetZasuviek;
+
+        ctx.fillStyle = "#d3d3d3";
+        for (let i = 0; i < pocetZasuviek; i++) {
+          ctx.strokeRect(100, 50 + i * zasuvkaVyska, width, zasuvkaVyska);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
